@@ -1,21 +1,33 @@
 """
 Hass Avocado Retail Price & Volume Data Ingestion Module.
-Loads multi-year retail transactions across US regions, extracts price elasticity features, and filters segments.
+Ingests the official Hass Avocado Board (HAB) retail dataset, validates SHA-256 checksums,
+and extracts log-log elasticity and Fourier annual seasonality features.
 """
 
 import os
+import hashlib
 import pandas as pd
 import numpy as np
 
 
 class AvocadoDataLoader:
     """
-    Data ingestion and feature preparation engine for avocado price elasticity and demand modeling.
+    Data ingestion and feature preparation engine for econometric demand modeling.
     """
+
+    EXPECTED_SHA256 = "631e77010fc1d22a57b7c0600b2f19427c7ba002f077cb7c3bad532bd72f0739"
 
     def __init__(self, data_dir="data"):
         self.data_dir = data_dir
         self.data_path = os.path.join(self.data_dir, "avocado.csv")
+
+    def validate_checksum(self) -> bool:
+        """Validates SHA-256 integrity of the raw avocado dataset."""
+        if not os.path.exists(self.data_path):
+            raise FileNotFoundError(f"Dataset not found at {self.data_path}")
+        with open(self.data_path, "rb") as f:
+            computed = hashlib.sha256(f.read()).hexdigest()
+        return computed == self.EXPECTED_SHA256
 
     def load_data(self, product_type='conventional', region='California'):
         """

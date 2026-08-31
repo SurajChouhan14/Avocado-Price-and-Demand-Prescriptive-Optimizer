@@ -1,0 +1,46 @@
+===================================================================================================================
+AVOCADO PREDICTIVE DEMAND MODELING & PRESCRIPTIVE PRICE OPTIMIZATION PIPELINE
+Dataset: Hass Avocado Board (HAB) US Retail Data | SHA-256 Validated
+Solvers: Econometric OLS Normal Equations + SciPy SLSQP Non-Linear Programming
+===================================================================================================================
+
+[1/3] Loading & Validating Hass Avocado Board transaction history...
+      • Dataset Records Loaded    : 470 weekly market observations (2015–2023, California Conventional)
+      • Raw Data SHA-256 Checksum : 631e77010fc1d22a57b7c0600b2f19427c7ba002f077cb7c3bad532bd72f0739
+      • Checksum Validation Status: VERIFIED PASS
+      • Mean Historical Price     : $1.1490 (~$1.15) | Mean Volume: 2,540,986.65 units
+
+[2/3] Fitting Econometric Demand Elasticity Model (Stage 1: Predictive)...
+      • Price Elasticity (Beta)   : -1.2258 (Demand is ELASTIC (|beta| > 1))
+      • Goodness-of-Fit (R^2)     : 0.7530
+      • Marginal Procurement Cost : $0.60 per unit
+      • Analytic Monopoly Optimum : P* = (beta / (1 + beta)) * c = $3.2567 (~$3.26)
+
+[3/3] Solving Non-Linear Retail Price Optimization (Stage 2: Prescriptive)...
+
+===================================================================================================================
+PRESCRIPTIVE PRICING & PROFIT OPTIMIZATION BENCHMARK REPORT
+===================================================================================================================
+  BASELINE BENCHMARK (HISTORICAL MEAN):
+    - Baseline Retail Price         : $1.1490 (~$1.15)
+    - Baseline Weekly Profit        : $1,378,967.15
+
+  SCENARIO 1: UNCONSTRAINED ECONOMIC MONOPOLY OPTIMUM (Headline Interior Solution)
+    - Optimization Solver           : SciPy SLSQP (8 iterations)
+    - Solution Classification       : INTERIOR_OPTIMUM (Price Bound Active: False)
+    - Prescribed Optimal Price (P*) : $3.2562 (~$3.26)
+    - Theoretical Analytic Match    : $3.2567 (Rel Error: 0.017%)
+    - Forecasted Weekly Demand      : 700,531.31 units
+    - Projected Weekly Profit       : $1,860,759.89
+    - Projected Net Profit Uplift   : +34.94% (in-sample, model-projected)
+
+  SCENARIO 2: BOUND-CONSTRAINED OPERATIONAL CEILING ($2.50 Retail Cap)
+    - Solution Classification       : BOUND_CONSTRAINED (Price Bound Active: True)
+    - Prescribed Optimal Price (P*) : $2.5000 ($2.50)
+    - Forecasted Weekly Demand      : 968,546.58 units
+    - Projected Weekly Profit       : $1,840,238.50
+    - Projected Net Profit Uplift   : +33.45% (in-sample, model-projected)
+===================================================================================================================
+  NOTE: All profit uplifts are in-sample, model-projected under constant-elasticity demand, no holdout evaluation.
+===================================================================================================================
+
