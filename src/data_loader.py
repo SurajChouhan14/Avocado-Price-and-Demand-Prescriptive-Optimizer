@@ -15,19 +15,29 @@ class AvocadoDataLoader:
     Data ingestion and feature preparation engine for econometric demand modeling.
     """
 
-    EXPECTED_SHA256 = "631e77010fc1d22a57b7c0600b2f19427c7ba002f077cb7c3bad532bd72f0739"
+    EXPECTED_SHA256_CRLF = "631e77010fc1d22a57b7c0600b2f19427c7ba002f077cb7c3bad532bd72f0739"
+    EXPECTED_SHA256_LF = "f2df3df4bf2dd36fb3a4088c42d5606163b4de6105ed7210a02571eb91e43a3d"
 
     def __init__(self, data_dir="data"):
         self.data_dir = data_dir
         self.data_path = os.path.join(self.data_dir, "avocado.csv")
 
     def validate_checksum(self) -> bool:
-        """Validates SHA-256 integrity of the raw avocado dataset."""
+        """Validates SHA-256 integrity of the raw avocado dataset with cross-platform CRLF/LF normalization."""
         if not os.path.exists(self.data_path):
             raise FileNotFoundError(f"Dataset not found at {self.data_path}")
         with open(self.data_path, "rb") as f:
-            computed = hashlib.sha256(f.read()).hexdigest()
-        return computed == self.EXPECTED_SHA256
+            raw = f.read()
+        
+        raw_lf = raw.replace(b'\r\n', b'\n')
+        computed_raw = hashlib.sha256(raw).hexdigest()
+        computed_lf = hashlib.sha256(raw_lf).hexdigest()
+
+        return (
+            computed_raw == self.EXPECTED_SHA256_CRLF or
+            computed_raw == self.EXPECTED_SHA256_LF or
+            computed_lf == self.EXPECTED_SHA256_LF
+        )
 
     def load_data(self, product_type='conventional', region='California'):
         """
