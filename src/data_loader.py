@@ -15,6 +15,7 @@ class AvocadoDataLoader:
     Data ingestion and feature preparation engine for econometric demand modeling.
     """
 
+    EXPECTED_SHA256 = "631e77010fc1d22a57b7c0600b2f19427c7ba002f077cb7c3bad532bd72f0739"
     EXPECTED_SHA256_CRLF = "631e77010fc1d22a57b7c0600b2f19427c7ba002f077cb7c3bad532bd72f0739"
     EXPECTED_SHA256_LF = "f2df3df4bf2dd36fb3a4088c42d5606163b4de6105ed7210a02571eb91e43a3d"
 
