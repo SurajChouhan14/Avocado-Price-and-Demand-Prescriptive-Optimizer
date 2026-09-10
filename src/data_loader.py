@@ -19,7 +19,9 @@ class AvocadoDataLoader:
     EXPECTED_SHA256_CRLF = "631e77010fc1d22a57b7c0600b2f19427c7ba002f077cb7c3bad532bd72f0739"
     EXPECTED_SHA256_LF = "f2df3df4bf2dd36fb3a4088c42d5606163b4de6105ed7210a02571eb91e43a3d"
 
-    def __init__(self, data_dir="data"):
+    def __init__(self, data_dir=None):
+        if data_dir is None:
+            data_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
         self.data_dir = data_dir
         self.data_path = os.path.join(self.data_dir, "avocado.csv")
 
